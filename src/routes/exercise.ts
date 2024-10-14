@@ -1,18 +1,12 @@
 import { Router } from "express";
-import {
-  deleteExercise,
-  getExercise,
-  getExercises,
-  postExercise,
-  updateExercise,
-} from "../controllers/exercise";
+import { exerciseController } from "../controllers/exercise";
 
 const router = Router();
 
-router.get("/", getExercises);
-router.get("/:id", getExercise);
-router.post("/", postExercise);
-router.put("/:id", updateExercise);
-router.delete("/:id", deleteExercise);
+router.get("/", exerciseController.handleGetExercises);
+router.get("/:id", exerciseController.handleGetExercise);
+router.post("/", exerciseController.handlePostExercise);
+router.put("/:id", exerciseController.handleUpdateExercise);
+router.delete("/:id", exerciseController.handleDeleteExercise);
 
 export { router };

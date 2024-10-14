@@ -3,6 +3,6 @@ export interface RoutineExercise {
     routine_id: string,
     sets?: number;
     reps?: number;
-    time?: number;
+    duration?: number;
     coment?: string;
 }

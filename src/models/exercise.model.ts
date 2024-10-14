@@ -13,7 +13,7 @@ const ExerciseSchema = new Schema<Exercise>(
     },
     muscleGroup: {
       type: [String],
-      enum: MuscleGroup,
+      enum: Object.values(MuscleGroup),
       required: true,
     },
   },
@@ -25,3 +25,4 @@ const ExerciseSchema = new Schema<Exercise>(
 const ExerciseModel = model("Exercises", ExerciseSchema);
 
 export default ExerciseModel;
+
