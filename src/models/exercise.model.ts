@@ -19,10 +19,9 @@ const ExerciseSchema = new Schema<Exercise>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const ExerciseModel = model("Exercises", ExerciseSchema);
 
 export default ExerciseModel;
-

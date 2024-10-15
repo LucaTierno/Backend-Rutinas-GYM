@@ -11,13 +11,13 @@ const RoutineSchema = new Schema<Routine>(
     },
     weekDay: {
       type: String,
-      enum: Object.values(WeekDay)  ,
+      enum: Object.values(WeekDay),
       required: true,
     },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const RoutineModel = model("Routines", RoutineSchema);

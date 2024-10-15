@@ -50,7 +50,7 @@ const UserSchema = new Schema<User>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const UserModel = model("Users", UserSchema);

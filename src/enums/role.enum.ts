@@ -1,5 +1,5 @@
 export enum Role {
-    ADMIN,
-    COACH,
-    CLIENT,
+  ADMIN,
+  COACH,
+  CLIENT,
 }

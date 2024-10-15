@@ -1,0 +1,115 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CategoryPlan {
+  id          String        @id @default(uuid())
+  createdAt   DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  name    String        @unique
+}
+
+model Exercise {
+  id            String        @id @default(uuid())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  name          String        @unique
+  image         String?
+  muscleGroups  MuscleGroup[]
+
+  //? Relaciones 
+  routineExercises RoutineExercises[]
+}
+
+model Routine {
+  id            String        @id @default(uuid())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  name          String
+  day           Day
+
+  //? Relaciones
+  routineExercises  RoutineExercises[]
+  
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+} 
+
+model RoutineExercises {
+  id            String        @id @default(uuid())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  sets          Int?
+  reps          Int?
+  time          Float?
+  comment       String?
+
+  //? Relaciones
+  exercisesId   String
+  exercise      Exercise     @relation(fields: [exercisesId], references: [id])
+  
+  routineId     String
+  routine       Routine      @relation(fields: [routineId], references: [id])
+}
+
+model User {
+  id              String        @id @default(uuid())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  name            String
+  age             Int
+  email           String        @unique
+  password        String
+  phone           Int
+  phoneEmergency  Int
+  address         String
+  role            Role
+
+  //? Relaciones
+  routine  Routine []
+}
+
+//? ENUMS:
+
+enum MuscleGroup {
+  pecho
+  espalda
+  hombros
+  biceps
+  triceps
+  cuadriceps
+  isquiotibiales
+  gluteos
+  pantorrillas
+  abdominales
+  trapecio
+  antebrazos
+  oblicuos
+}
+
+enum Day {
+  lunes
+  martes
+  miercoles
+  jueves
+  viernes
+  sabado
+  domingo
+}
+
+enum Role {
+  ADMIN
+  COACH
+  CLIENT
+}
