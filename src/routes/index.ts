@@ -7,6 +7,8 @@ const router = Router();
 
 const cleanFileName = (fileName: string) => {
   const file = fileName.split(".").shift();
+  console.log(file);
+
   return file;
 };
 
