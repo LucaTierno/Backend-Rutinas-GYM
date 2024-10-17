@@ -14,6 +14,10 @@ model CategoryPlan {
   updatedAt DateTime      @updatedAt
 
   name    String        @unique
+
+  //? Relaciones
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
 }
 
 model Exercise {
@@ -68,16 +72,17 @@ model User {
   updatedAt       DateTime      @updatedAt
 
   name            String
-  age             Int
+  age             Float
   email           String        @unique
   password        String
-  phone           Int
-  phoneEmergency  Int
+  phone           Float
+  phoneEmergency  Float
   address         String
-  role            Role
+  role            Role         @default(CLIENT)
 
   //? Relaciones
-  routine  Routine []
+  routine  Routine[]
+  categoryPlan CategoryPlan[]
 }
 
 //? ENUMS:
