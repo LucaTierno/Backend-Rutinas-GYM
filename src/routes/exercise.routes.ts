@@ -1,7 +1,10 @@
 import { Router } from "express";
 import { exerciseController } from "../controllers/exercise.controller";
 import { schemaValition } from "../middleware/schemaValidator.middleware";
-import { CreateExerciseSchema } from "../schemas/exercise.schema";
+import {
+  CreateExerciseSchema,
+  UpdateExerciseSchema,
+} from "../schemas/exercise.schema";
 
 const router = Router();
 
@@ -12,7 +15,11 @@ router.post(
   schemaValition(CreateExerciseSchema),
   exerciseController.handlePostExercise
 );
-router.put("/:id", exerciseController.handleUpdateExercise);
+router.put(
+  "/:id",
+  schemaValition(UpdateExerciseSchema),
+  exerciseController.handleUpdateExercise
+);
 router.delete("/:id", exerciseController.handleDeleteExercise);
 
 export { router };

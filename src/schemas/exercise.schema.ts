@@ -10,3 +10,11 @@ export const CreateExerciseSchema = z.object({
     muscleGroups: z.array(MuscleGroupEnum).min(1),
   }),
 });
+
+export const UpdateExerciseSchema = z.object({
+  body: z.object({
+    name: z.string().min(3).max(20).optional(),
+    image: z.string().optional(),
+    muscleGroups: z.array(MuscleGroupEnum).min(1).optional(),
+  }),
+});
