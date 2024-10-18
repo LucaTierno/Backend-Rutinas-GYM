@@ -27,6 +27,10 @@ const getExercises = async () => {
 
     return resExercises;
   } catch (error: any) {
+    if (error.status) {
+      throw error;
+    }
+
     throw { status: 500, message: "Error al obtener los ejercicios." };
   }
 };
@@ -45,7 +49,10 @@ const getExercise = async (id: string) => {
     }
 
     return resExercise;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.status) {
+      throw error;
+    }
     throw { status: 500, message: "Error al obtener el ejercicio." };
   }
 };
@@ -65,7 +72,10 @@ const updateExercise = async (id: string, data: Exercise) => {
     }
 
     return resUpdate;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.status) {
+      throw error;
+    }
     throw { status: 500, message: "Error al actualizar el ejercicio." };
   }
 };
@@ -84,7 +94,10 @@ const deleteExercise = async (id: string) => {
     }
 
     return resDelete;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.status) {
+      throw error;
+    }
     throw { status: 500, message: "Error al eliminar el ejercicio." };
   }
 };

@@ -30,7 +30,11 @@ const registerNewUser = async (data: User) => {
     const { password: _, ...userWithoutPassword } = resCreate;
 
     return userWithoutPassword;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.status) {
+      throw error;
+    }
+
     throw { status: 500, message: "Error al crear el usuario." };
   }
 };
@@ -60,7 +64,11 @@ const loginUser = async (data: Auth) => {
     const { password: _, ...userWithoutPassword } = findUser;
 
     return userWithoutPassword;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.status) {
+      throw error;
+    }
+
     throw { status: 500, message: "Error al iniciar sesion." };
   }
 };

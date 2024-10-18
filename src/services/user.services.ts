@@ -15,7 +15,10 @@ const getUserById = async (id: string) => {
     const { password: _, ...userWithoutPassword } = getUser;
 
     return userWithoutPassword;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.status) {
+      throw error;
+    }
     throw { status: 500, message: "Error al obtener el usuario." };
   }
 };
@@ -33,7 +36,10 @@ const getUsers = async () => {
     );
 
     return usersWithoutPasswords;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.status) {
+      throw error;
+    }
     throw { status: 500, message: "Error al obtener los usuarios" };
   }
 };
@@ -71,7 +77,10 @@ const updateUserById = async (id: string, data: UpdateUserData) => {
     }
 
     return updateUser;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.status) {
+      throw error;
+    }
     throw { status: 500, message: "Error al actualizar el usuario" };
   }
 };
@@ -99,7 +108,10 @@ const deleteUserById = async (id: string) => {
     }
 
     return deleteUser;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.status) {
+      throw error;
+    }
     throw { status: 500, message: "Error al eliminar el usuario" };
   }
 };
