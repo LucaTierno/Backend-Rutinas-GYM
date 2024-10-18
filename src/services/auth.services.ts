@@ -10,11 +10,11 @@ const registerNewUser = async (data: User) => {
 
     const alreadyUser = await prisma.user.findFirst({ where: { email } });
 
-    const passHash = await encrypt(password);
-
     if (alreadyUser) {
       throw { status: 409, message: "El email ya está en uso" };
     }
+
+    const passHash = await encrypt(password);
 
     const resCreate = await prisma.user.create({
       data: {
@@ -28,9 +28,9 @@ const registerNewUser = async (data: User) => {
       },
     });
 
-    const { password: _, ...userWithoutPassword } = resCreate;
+    const { password: _, ...user } = resCreate;
 
-    return userWithoutPassword;
+    return user;
   } catch (error: any) {
     if (error.status) {
       throw error;
@@ -64,9 +64,9 @@ const loginUser = async (data: Auth) => {
 
     const token = generateToken(findUser.id, findUser.email, findUser.name)
 
-    const { password: _, ...userWithoutPassword } = findUser;
+    const { password: _, ...user } = findUser;
 
-    return {userWithoutPassword, token};
+    return {user, token};
   } catch (error: any) {
     if (error.status) {
       throw error;
