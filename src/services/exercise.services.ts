@@ -1,67 +1,92 @@
 import { Exercise } from "../interfaces/exercise.interface";
 import prisma from "../lib/prisma";
 
+//* Crear ejercicio
 const createExercise = async (data: Exercise) => {
-  const resCreate = await prisma.exercise.create({ data });
+  try {
+    const resCreate = await prisma.exercise.create({ data });
 
-  if (!resCreate) {
-    throw { status: 400, message: "No se pudo crear el ejercicio" };
+    return resCreate;
+  } catch (error: any) {
+    if (error.code === "P2002") {
+      throw { status: 409, message: "El ejercicio ya existe." };
+    }
+
+    throw { status: 500, message: "Error al crear el ejercicio." };
   }
-
-  return resCreate;
 };
 
+//* Obtener todos los ejercicios
 const getExercises = async () => {
-  const resExercises = await prisma.exercise.findMany();
+  try {
+    const resExercises = await prisma.exercise.findMany();
 
-  if (!resExercises) {
-    throw { status: 400, message: "No se pudo obtener ningún ejercicio" };
+    if (!resExercises) {
+      throw { status: 400, message: "No se pudo obtener ningún ejercicio" };
+    }
+
+    return resExercises;
+  } catch (error: any) {
+    throw { status: 500, message: "Error al obtener los ejercicios." };
   }
-
-  return resExercises;
 };
 
+//* Obtener un ejercicio por ID
 const getExercise = async (id: string) => {
-  const resExercise = await prisma.exercise.findUnique({
-    where: {
-      id,
-    },
-  });
+  try {
+    const resExercise = await prisma.exercise.findUnique({
+      where: {
+        id,
+      },
+    });
 
-  if (!resExercise) {
-    throw { status: 400, message: "No se pudo obtener el ejercicio" };
+    if (!resExercise) {
+      throw { status: 400, message: "No se pudo obtener el ejercicio" };
+    }
+
+    return resExercise;
+  } catch (error) {
+    throw { status: 500, message: "Error al obtener el ejercicio." };
   }
-
-  return resExercise;
 };
 
+//* Actualizar un ejercicio por ID
 const updateExercise = async (id: string, data: Exercise) => {
-  const resUpdate = await prisma.exercise.update({
-    where: {
-      id,
-    },
-    data,
-  });
+  try {
+    const resUpdate = await prisma.exercise.update({
+      where: {
+        id,
+      },
+      data,
+    });
 
-  if (!resUpdate) {
-    throw { status: 400, message: "No se pudo actualizar el ejercicio" };
+    if (!resUpdate) {
+      throw { status: 400, message: "No se pudo actualizar el ejercicio" };
+    }
+
+    return resUpdate;
+  } catch (error) {
+    throw { status: 500, message: "Error al actualizar el ejercicio." };
   }
-
-  return resUpdate;
 };
 
+//* Eliminar un ejercicio
 const deleteExercise = async (id: string) => {
-  const resDelete = await prisma.exercise.delete({
-    where: {
-      id,
-    },
-  });
+  try {
+    const resDelete = await prisma.exercise.delete({
+      where: {
+        id,
+      },
+    });
 
-  if (!resDelete) {
-    throw { status: 400, message: "No se pudo eliminar el ejercicio" };
+    if (!resDelete) {
+      throw { status: 400, message: "No se pudo eliminar el ejercicio" };
+    }
+
+    return resDelete;
+  } catch (error) {
+    throw { status: 500, message: "Error al eliminar el ejercicio." };
   }
-
-  return resDelete;
 };
 
 export const exerciseService = {
