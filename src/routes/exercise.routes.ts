@@ -9,17 +9,21 @@ import {
 const router = Router();
 
 router.get("/", exerciseController.handleGetExercises);
+
 router.get("/:id", exerciseController.handleGetExercise);
+
 router.post(
   "/",
   schemaValition(CreateExerciseSchema),
   exerciseController.handlePostExercise
 );
+
 router.put(
   "/:id",
   schemaValition(UpdateExerciseSchema),
   exerciseController.handleUpdateExercise
 );
+
 router.delete("/:id", exerciseController.handleDeleteExercise);
 
 export { router };
