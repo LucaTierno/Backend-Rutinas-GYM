@@ -2,17 +2,6 @@ import { Request, Response } from "express";
 
 import { userService } from "../services/user.services";
 
-const handlePostUser = async ({ body }: Request, res: Response) => {
-  try {
-    const response = await userService.createUser(body);
-    res.send(response);
-  } catch (error: any) {
-    const status = error.status || 500;
-    const message = error.message || "Error inesperado.";
-    res.status(status).json({ error: message });
-  }
-};
-
 const handleGetUser = async ({ params }: Request, res: Response) => {
   try {
     const { id } = params;
@@ -62,7 +51,6 @@ const handleDeleteUser = async (req: Request, res: Response) => {
 };
 
 export const userController = {
-  handlePostUser,
   handleGetUser,
   handleGetUsers,
   handleUpdateUser,

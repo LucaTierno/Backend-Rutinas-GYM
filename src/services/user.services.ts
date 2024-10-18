@@ -1,33 +1,4 @@
-import { User } from "../interfaces/user.interface";
 import prisma from "../lib/prisma";
-
-const createUser = async (data: User) => {
-  try {
-    const { name, age, email, password, phone, phoneEmergency, address } = data;
-
-    const alreadyUser = await prisma.user.findFirst({ where: { email } });
-
-    if (alreadyUser) {
-      throw { status: 409, message: "El email ya está en uso" };
-    }
-
-    const resCreate = await prisma.user.create({
-      data: {
-        name,
-        age,
-        email,
-        password,
-        phone,
-        phoneEmergency,
-        address,
-      },
-    });
-
-    return resCreate;
-  } catch (error) {
-    throw { status: 500, message: "Error al crear el usuario." };
-  }
-};
 
 const getUserById = async (id: string) => {
   try {
@@ -41,7 +12,9 @@ const getUserById = async (id: string) => {
       throw { status: 400, message: "No se encontró el usuario" };
     }
 
-    return getUser;
+    const { password: _, ...userWithoutPassword } = getUser;
+
+    return userWithoutPassword;
   } catch (error) {
     throw { status: 500, message: "Error al obtener el usuario." };
   }
@@ -51,11 +24,15 @@ const getUsers = async () => {
   try {
     const findUsers = await prisma.user.findMany({});
 
-    if (!findUsers) {
-      throw { status: 400, message: "No se encontró ningún usuario" };
+    if (!findUsers || findUsers.length === 0) {
+      throw { status: 404, message: "No se encontró ningún usuario" };
     }
 
-    return findUsers;
+    const usersWithoutPasswords = findUsers.map(
+      ({ password, ...user }) => user
+    );
+
+    return usersWithoutPasswords;
   } catch (error) {
     throw { status: 500, message: "Error al obtener los usuarios" };
   }
@@ -128,7 +105,6 @@ const deleteUserById = async (id: string) => {
 };
 
 export const userService = {
-  createUser,
   getUserById,
   getUsers,
   updateUserById,
