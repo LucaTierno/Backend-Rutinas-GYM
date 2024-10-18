@@ -5,10 +5,11 @@ import {
   CreateExerciseSchema,
   UpdateExerciseSchema,
 } from "../schemas/exercise.schema";
+import { checkSession } from "../middleware/session";
 
 const router = Router();
 
-router.get("/", exerciseController.handleGetExercises);
+router.get("/", checkSession, exerciseController.handleGetExercises);
 
 router.get("/:id", exerciseController.handleGetExercise);
 

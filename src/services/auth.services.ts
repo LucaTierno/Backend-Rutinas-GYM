@@ -2,6 +2,7 @@ import { Auth } from "../interfaces/auth.interface";
 import { User } from "../interfaces/user.interface";
 import prisma from "../lib/prisma";
 import { encrypt, verified } from "../utils/bcrypt.handle";
+import { generateToken } from "../utils/jwt.handle";
 
 const registerNewUser = async (data: User) => {
   try {
@@ -50,7 +51,7 @@ const loginUser = async (data: Auth) => {
     });
 
     if (!findUser) {
-      throw { status: 400, message: "No se encotró el usuario" };
+      throw { status: 400, message: "Email incorrecto" };
     }
 
     const passwordHash = findUser.password;
@@ -61,9 +62,11 @@ const loginUser = async (data: Auth) => {
       throw { status: 401, message: "Contraseña incorrecta" };
     }
 
+    const token = generateToken(findUser.id, findUser.email, findUser.name)
+
     const { password: _, ...userWithoutPassword } = findUser;
 
-    return userWithoutPassword;
+    return {userWithoutPassword, token};
   } catch (error: any) {
     if (error.status) {
       throw error;

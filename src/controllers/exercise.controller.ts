@@ -1,8 +1,9 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { exerciseService } from "../services/exercise.services";
+import { RequestExt } from "../interfaces/requestExt.interface";
 
 //* Obtener el ejercicio por el ID
-const handleGetExercise = async (req: Request, res: Response) => {
+const handleGetExercise = async (req: RequestExt, res: Response) => {
   try {
     const { id } = req.params;
     const response = await exerciseService.getExercise(id);
@@ -15,9 +16,12 @@ const handleGetExercise = async (req: Request, res: Response) => {
 };
 
 //* Obtener todos los ejercicios
-const handleGetExercises = async (req: Request, res: Response) => {
+const handleGetExercises = async (req: RequestExt, res: Response) => {
   try {
     const response = await exerciseService.getExercises();
+
+    console.log("Este es el req user: ", req.user);
+
     res.send(response);
   } catch (error: any) {
     const status = error.status || 500;
@@ -27,7 +31,7 @@ const handleGetExercises = async (req: Request, res: Response) => {
 };
 
 //* Crear el ejercicio
-const handlePostExercise = async ({ body }: Request, res: Response) => {
+const handlePostExercise = async ({ body }: RequestExt, res: Response) => {
   try {
     const response = await exerciseService.createExercise(body);
     res.send(response);
@@ -40,7 +44,7 @@ const handlePostExercise = async ({ body }: Request, res: Response) => {
 };
 
 //* Actualizar el ejercicio
-const handleUpdateExercise = async (req: Request, res: Response) => {
+const handleUpdateExercise = async (req: RequestExt, res: Response) => {
   try {
     const { id } = req.params;
     const { body } = req;
@@ -55,7 +59,7 @@ const handleUpdateExercise = async (req: Request, res: Response) => {
 };
 
 //* Eliminar el ejercicio
-const handleDeleteExercise = async (req: Request, res: Response) => {
+const handleDeleteExercise = async (req: RequestExt, res: Response) => {
   try {
     const { id } = req.params;
     const deleteExercise = await exerciseService.deleteExercise(id);

@@ -1,7 +1,8 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { authService } from "../services/auth.services";
+import { RequestExt } from "../interfaces/requestExt.interface";
 
-const handlerRegister = async ({ body }: Request, res: Response) => {
+const handlerRegister = async ({ body }: RequestExt, res: Response) => {
   try {
     const response = await authService.registerNewUser(body);
     res.send(response);
@@ -12,7 +13,7 @@ const handlerRegister = async ({ body }: Request, res: Response) => {
   }
 };
 
-const handlerLogin = async ({ body }: Request, res: Response) => {
+const handlerLogin = async ({ body }: RequestExt, res: Response) => {
   try {
     const response = await authService.loginUser(body);
     res.send(response);
