@@ -25,12 +25,8 @@ const handleGetExercises = async (req: Request, res: Response) => {
 
 //* Crear el ejercicio
 const handlePostExercise = async ({ body }: Request, res: Response) => {
-  try {
-    const response = await exerciseService.createExercise(body);
-    res.send(response);
-  } catch (error) {
-    handleHttp(res, "ERROR_POST_EXERCISE");
-  }
+  const response = await exerciseService.createExercise(body);
+  res.send(response);
 };
 
 //* Actualizar el ejercicio
