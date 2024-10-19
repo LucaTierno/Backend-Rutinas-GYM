@@ -1,8 +1,8 @@
 export interface RoutineExercise {
-  exercise_id: string;
-  routine_id: string;
+  exerciseId: string;
+  routineId: string;
   sets?: number;
   reps?: number;
   duration?: number;
-  coment?: string;
+  comment?: string;
 }

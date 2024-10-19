@@ -9,22 +9,22 @@ import { checkSession } from "../middleware/session";
 
 const router = Router();
 
-router.get("/", checkSession, exerciseController.handleGetExercises);
+router.get("/", exerciseController.handleGetExercises);
 
-router.get("/:id", checkSession, exerciseController.handleGetExercise);
+router.get("/:id", exerciseController.handleGetExercise);
 
 router.post(
-  "/", checkSession,
+  "/", 
   schemaValition(CreateExerciseSchema),
   exerciseController.handlePostExercise
 );
 
 router.put(
-  "/:id", checkSession,
+  "/:id", 
   schemaValition(UpdateExerciseSchema),
   exerciseController.handleUpdateExercise
 );
 
-router.delete("/:id", checkSession, exerciseController.handleDeleteExercise);
+router.delete("/:id", exerciseController.handleDeleteExercise);
 
 export { router };

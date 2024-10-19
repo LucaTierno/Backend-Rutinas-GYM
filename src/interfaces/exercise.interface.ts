@@ -1,4 +1,5 @@
-import { MuscleGroup } from "../enums/muscleGroup.enum";
+import { MuscleGroup } from "@prisma/client";
+
 
 export interface Exercise {
   name: string;

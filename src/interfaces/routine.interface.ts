@@ -1,6 +1,9 @@
-import { WeekDay } from "../enums/weekDay.enum";
+import { Day } from "@prisma/client";
+import { RoutineExercise } from "./routineExercise.interface";
 
 export interface Routine {
-  user_id: string;
-  weekDay: WeekDay;
+  userId: string;
+  name: string;
+  day: Day;
+  routineExercises: RoutineExercise[];
 }

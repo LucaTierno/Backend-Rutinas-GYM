@@ -4,12 +4,12 @@ import { checkSession } from "../middleware/session";
 
 const router = Router();
 
-router.get("/", checkSession, userController.handleGetUsers);
+router.get("/", userController.handleGetUsers);
 
-router.get("/:id", checkSession, userController.handleGetUser);
+router.get("/:id", userController.handleGetUser);
 
-router.put("/:id", checkSession, userController.handleUpdateUser);
+router.put("/:id", userController.handleUpdateUser);
 
-router.delete("/:id", checkSession, userController.handleDeleteUser);
+router.delete("/:id", userController.handleDeleteUser);
 
 export { router };

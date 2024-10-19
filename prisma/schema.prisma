@@ -59,8 +59,8 @@ model RoutineExercises {
   comment       String?
 
   //? Relaciones
-  exercisesId   String
-  exercise      Exercise     @relation(fields: [exercisesId], references: [id])
+  exerciseId   String
+  exercise      Exercise     @relation(fields: [exerciseId], references: [id])
   
   routineId     String
   routine       Routine      @relation(fields: [routineId], references: [id])
