@@ -6,18 +6,19 @@ import { routineController } from "../controllers/routine.controller";
 
 const router = Router();
 
-router.get("/", checkSession);
+router.get("/", checkSession, routineController.handleGetRoutines);
 
-router.get("/:id", checkSession);
+router.get("/:id", );
 
 router.post(
   "/",
+  checkSession,
   schemaValition(CreateRoutineSchema),
   routineController.handlePostRoutine
 );
 
-router.put("/:id", checkSession);
+router.put("/:id", );
 
-router.delete("/:id", checkSession);
+router.delete("/:id", );
 
 export { router };

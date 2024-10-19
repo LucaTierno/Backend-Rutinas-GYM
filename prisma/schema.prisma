@@ -59,7 +59,7 @@ model RoutineExercises {
   comment       String?
 
   //? Relaciones
-  exerciseId   String
+  exerciseId     String
   exercise      Exercise     @relation(fields: [exerciseId], references: [id])
   
   routineId     String
