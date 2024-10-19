@@ -19,3 +19,4 @@ export const CreateRoutineSchema = z.object({
     routineExercises: z.array(RoutineExerciseSchema).min(1),
   }),
 });
+ 

@@ -32,7 +32,6 @@ const createRoutine = async (routine: Routine, userId: string) => {
 
     return newRoutine;
   } catch (error: any) {
-
     if (error.status) {
       throw error;
     }
@@ -42,25 +41,24 @@ const createRoutine = async (routine: Routine, userId: string) => {
 
 const getRoutinesForClient = async (userId: string) => {
   try {
-
-    console.log(userId);
-    
-
     const routines = await prisma.routine.findMany({
       where: {
-        userId
-      }
-    })
+        userId,
+      },
+    });
 
+    if (!routines) {
+      throw { status: 401, message: "No se encontro ningúna rutina asignada" };
+    }
 
-    console.log(routines);
-    
-    return routines
-  } catch (error) {
-    
+    return routines;
+  } catch (error: any) {
+    if (error.status) {
+      throw error;
+    }
+    throw { status: 500, message: "Error al obtener las rutinas." };
   }
-
-}
+};
 
 export const routineService = {
   createRoutine,
