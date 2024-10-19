@@ -11,20 +11,20 @@ const router = Router();
 
 router.get("/", checkSession, exerciseController.handleGetExercises);
 
-router.get("/:id", exerciseController.handleGetExercise);
+router.get("/:id", checkSession, exerciseController.handleGetExercise);
 
 router.post(
-  "/",
+  "/", checkSession,
   schemaValition(CreateExerciseSchema),
   exerciseController.handlePostExercise
 );
 
 router.put(
-  "/:id",
+  "/:id", checkSession,
   schemaValition(UpdateExerciseSchema),
   exerciseController.handleUpdateExercise
 );
 
-router.delete("/:id", exerciseController.handleDeleteExercise);
+router.delete("/:id", checkSession, exerciseController.handleDeleteExercise);
 
 export { router };

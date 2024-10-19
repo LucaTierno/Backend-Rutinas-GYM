@@ -10,7 +10,7 @@ export const schemaValition =
         params: req.params,
         query: req.query,
       });
-      next(); // Si pasa la validación, continúa
+      next(); 
     } catch (error) {
       console.log(error);
       if (error instanceof ZodError) {
