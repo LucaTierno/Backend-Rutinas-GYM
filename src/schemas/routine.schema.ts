@@ -34,6 +34,6 @@ export const UpdateRoutineSchema = z.object({
     routineExercises: z.array(UpdateRoutineExerciseSchema).min(1).optional(),
   }),
   params: z.object({
-    routineId: z.string(),
+    routineId: z.string().uuid(),
   }),
 });

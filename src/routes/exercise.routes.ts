@@ -5,7 +5,6 @@ import {
   CreateExerciseSchema,
   UpdateExerciseSchema,
 } from "../schemas/exercise.schema";
-import { checkSession } from "../middleware/session";
 
 const router = Router();
 
@@ -14,13 +13,13 @@ router.get("/", exerciseController.handleGetExercises);
 router.get("/:id", exerciseController.handleGetExercise);
 
 router.post(
-  "/", 
+  "/",
   schemaValition(CreateExerciseSchema),
   exerciseController.handlePostExercise
 );
 
 router.put(
-  "/:id", 
+  "/:id",
   schemaValition(UpdateExerciseSchema),
   exerciseController.handleUpdateExercise
 );
