@@ -21,21 +21,25 @@ const handlePostRoutine = async (req: RequestExt, res: Response) => {
 
 // //* Obtener la rutina por el ID
 const handleGetRoutine = async (req: RequestExt, res: Response) => {
-  // try {
-  //   const { id } = req.params;
-  //   const response = await exerciseService.getExercise(id);
-  //   res.send(response);
-  // } catch (error: any) {
-  //   const status = error.status || 500;
-  //   const message = error.message || "Error inesperado.";
-  //   res.status(status).json({ error: message });
-  // }
+  try {
+    const { id } = req.user as JwtPayload;
+    const routineId = req.params.id;
+    const response = await routineService.getRoutineForClientById(id, routineId);
+    res.send(response);
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || "Error inesperado.";
+    res.status(status).json({ error: message });
+  }
 };
 
 //* Obtener todas las rutinas
 const handleGetRoutines = async (req: RequestExt, res: Response) => {
   try {
     const { id } = req.user as JwtPayload;
+
+    console.log(req.user);
+    
 
     const response = await routineService.getRoutinesForClient(id);
 
@@ -49,16 +53,16 @@ const handleGetRoutines = async (req: RequestExt, res: Response) => {
 
 //* Actualizar la rutina
 const handleUpdateRoutine = async (req: RequestExt, res: Response) => {
-  // try {
-  //   const { id } = req.params;
-  //   const { body } = req;
-  //   const updatedExercise = await exerciseService.updateExercise(id, body);
-  //   res.send(updatedExercise);
-  // } catch (error: any) {
-  //   const status = error.status || 500;
-  //   const message = error.message || "Error inesperado.";
-  //   res.status(status).json({ error: message });
-  // }
+  try {
+    const { id } = req.params;
+    const { body } = req;
+    const updatedExercise = await routineService.updateRoutine(id, body);
+    res.send(updatedExercise);
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || "Error inesperado.";
+    res.status(status).json({ error: message });
+  }
 };
 
 //* Eliminar el ejercicio

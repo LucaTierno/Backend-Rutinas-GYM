@@ -1,14 +1,17 @@
 import { Router } from "express";
 import { schemaValition } from "../middleware/schemaValidator.middleware";
 import { checkSession } from "../middleware/session";
-import { CreateRoutineSchema } from "../schemas/routine.schema";
+import {
+  CreateRoutineSchema,
+  UpdateRoutineSchema,
+} from "../schemas/routine.schema";
 import { routineController } from "../controllers/routine.controller";
 
 const router = Router();
 
 router.get("/", checkSession, routineController.handleGetRoutines);
 
-router.get("/:id", );
+router.get("/:id", checkSession, routineController.handleGetRoutine);
 
 router.post(
   "/",
@@ -17,8 +20,13 @@ router.post(
   routineController.handlePostRoutine
 );
 
-router.put("/:id", );
+router.put(
+  "/:id",
+  checkSession,
+  schemaValition(UpdateRoutineSchema),
+  routineController.handleUpdateRoutine
+);
 
-router.delete("/:id", );
+router.delete("/:id");
 
 export { router };
