@@ -46,7 +46,8 @@ const handlePostExercise = async ({ body }: RequestExt, res: Response) => {
 //* Actualizar el ejercicio
 const handleUpdateExercise = async (req: RequestExt, res: Response) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params;    
+    
     const { body } = req;
     const updatedExercise = await exerciseService.updateExercise(id, body);
 

@@ -18,6 +18,6 @@ export const UpdateExerciseSchema = z.object({
     muscleGroups: z.array(MuscleGroupEnum).min(1).optional(),
   }),
   params: z.object({
-    exerciseId: z.string().uuid(),
+    id: z.string().uuid(),
   }),
 });

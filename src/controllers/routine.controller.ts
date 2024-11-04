@@ -37,10 +37,6 @@ const handleGetRoutine = async (req: RequestExt, res: Response) => {
 const handleGetRoutines = async (req: RequestExt, res: Response) => {
   try {
     const { id } = req.user as JwtPayload;
-
-    console.log(req.user);
-    
-
     const response = await routineService.getRoutinesForClient(id);
 
     res.send(response);

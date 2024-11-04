@@ -25,7 +25,12 @@ const getUserById = async (id: string) => {
 
 const getUsers = async () => {
   try {
-    const findUsers = await prisma.user.findMany({});
+    const findUsers = await prisma.user.findMany({
+      include: {
+        routine: true,
+        categoryPlans: true,
+      },
+    });
 
     if (!findUsers || findUsers.length === 0) {
       throw { status: 404, message: "No se encontró ningún usuario" };
