@@ -28,7 +28,7 @@ const getUsers = async () => {
     const findUsers = await prisma.user.findMany({
       include: {
         routine: true,
-        categoryPlan: true,
+        categoryPlans: true,
       },
     });
 

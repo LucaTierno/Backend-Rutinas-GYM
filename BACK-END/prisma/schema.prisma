@@ -9,15 +9,13 @@ datasource db {
 }
 
 model CategoryPlan {
-  id          String        @id @default(uuid())
-  createdAt   DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  id          String           @id @default(uuid())
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 
-  name    String        @unique
+  name        String           @unique
 
-  //? Relaciones
-  userId        String
-  user          User      @relation(fields: [userId], references: [id])
+  users       UserCategoryPlan[]
 }
 
 model Exercise {
@@ -82,7 +80,19 @@ model User {
 
   //? Relaciones
   routine  Routine[]
-  categoryPlan CategoryPlan[]
+  categoryPlans UserCategoryPlan[]
+}
+
+model UserCategoryPlan {
+  id            String        @id @default(uuid())
+  userId        String
+  categoryPlanId String
+  assignedAt    DateTime      @default(now())
+
+  user          User          @relation(fields: [userId], references: [id])
+  categoryPlan  CategoryPlan  @relation(fields: [categoryPlanId], references: [id])
+
+  @@unique([userId, categoryPlanId])
 }
 
 //? ENUMS:
