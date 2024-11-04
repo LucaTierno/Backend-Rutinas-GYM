@@ -15,7 +15,7 @@ model CategoryPlan {
 
   name        String           @unique
 
-  users       UserCategoryPlan[]
+  users       UserCategoryPlan[] 
 }
 
 model Exercise {
@@ -80,7 +80,7 @@ model User {
 
   //? Relaciones
   routine  Routine[]
-  categoryPlans UserCategoryPlan[]
+  categoryPlans UserCategoryPlan[] 
 }
 
 model UserCategoryPlan {
@@ -89,8 +89,8 @@ model UserCategoryPlan {
   categoryPlanId String
   assignedAt    DateTime      @default(now())
 
-  user          User          @relation(fields: [userId], references: [id])
-  categoryPlan  CategoryPlan  @relation(fields: [categoryPlanId], references: [id])
+  user          User          @relation(fields: [userId], references: [id] ,onDelete: Cascade )
+  categoryPlan  CategoryPlan  @relation(fields: [categoryPlanId], references: [id], onDelete: Cascade)
 
   @@unique([userId, categoryPlanId])
 }

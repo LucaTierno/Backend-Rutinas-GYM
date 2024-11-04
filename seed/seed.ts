@@ -4,6 +4,24 @@ import { hash } from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
+  // Primero limpiamos los datos existentes
+  await prisma.userCategoryPlan.deleteMany({});
+  await prisma.user.deleteMany({});
+  await prisma.categoryPlan.deleteMany({});
+
+  // Crear CategoryPlans
+  const categoryPlans = await prisma.categoryPlan.createMany({
+    data: [
+      { name: "Aeróbico" },
+      { name: "Fuerza" },
+      { name: "Resistencia" },
+      { name: "Funcional" },
+      { name: "Musculacion" },
+      { name: "Recuperacion" },
+      { name: "Deficit" },
+    ],
+  });
+
   // Crear usuario Admin
   const adminPassword = await hash("admin123", 10);
   const admin = await prisma.user.create({
@@ -49,7 +67,9 @@ async function main() {
     },
   });
 
-  console.log({ admin, coach, client });
+  console.log("Seeding completed!");
+  console.log("Created CategoryPlans:", categoryPlans);
+  console.log("Created Users:", { admin, coach, client });
 }
 
 main()
