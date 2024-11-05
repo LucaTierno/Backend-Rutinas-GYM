@@ -1,10 +1,11 @@
+import { Response } from "express";
 import { Auth } from "../interfaces/auth.interface";
 import { User } from "../interfaces/user.interface";
 import prisma from "../lib/prisma";
 import { encrypt, verified } from "../utils/bcrypt.handle";
 import { generateToken } from "../utils/jwt.handle";
 
-const registerNewUser = async (data: User) => {
+const registerNewUser = async (data: User, res: Response) => {
   try {
     const {
       name,
@@ -17,12 +18,10 @@ const registerNewUser = async (data: User) => {
       categoryPlans: plansNames,
     } = data;
 
-    console.log("PLANES: ", plansNames);
-
     const alreadyUser = await prisma.user.findFirst({ where: { email } });
 
     if (alreadyUser) {
-      throw { status: 409, message: "El email ya está en uso" };
+      return res.status(409).json({ message: "El email ya está en uso" });
     }
 
     const passHash = await encrypt(password);
@@ -50,12 +49,10 @@ const registerNewUser = async (data: User) => {
 
     console.log(plansIds);
 
-    const userCategoryPlans = plansIds.map(
-      (categoryPlan) => ({
-        userId: resCreate.id,
-        categoryPlanId: categoryPlan.id,
-      })
-    );
+    const userCategoryPlans = plansIds.map((categoryPlan) => ({
+      userId: resCreate.id,
+      categoryPlanId: categoryPlan.id,
+    }));
 
     await prisma.userCategoryPlan.createMany({
       data: userCategoryPlans,
