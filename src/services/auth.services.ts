@@ -14,8 +14,10 @@ const registerNewUser = async (data: User) => {
       phone,
       phoneEmergency,
       address,
-      categoryPlans: plansIds,
+      categoryPlans: plansNames,
     } = data;
+
+    console.log("PLANES: ", plansNames);
 
     const alreadyUser = await prisma.user.findFirst({ where: { email } });
 
@@ -24,8 +26,6 @@ const registerNewUser = async (data: User) => {
     }
 
     const passHash = await encrypt(password);
-
-    console.log(plansIds);
 
     const resCreate = await prisma.user.create({
       data: {
@@ -36,21 +36,29 @@ const registerNewUser = async (data: User) => {
         phone,
         phoneEmergency,
         address,
-        categoryPlans: {
-          create: plansIds.map((planId) => ({
-            categoryPlan: {
-              connect: { id: planId },
-            },
-          })),
-        },
-        include: {
-          categoryPlans: {
-            include: {
-              categoryPlan: true,
-            },
-          },
-        },
       },
+    });
+
+    const plansIds = await prisma.categoryPlan.findMany({
+      where: {
+        name: { in: plansNames as unknown as string[] },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    console.log(plansIds);
+
+    const userCategoryPlans = plansIds.map(
+      (categoryPlan) => ({
+        userId: resCreate.id,
+        categoryPlanId: categoryPlan.id,
+      })
+    );
+
+    await prisma.userCategoryPlan.createMany({
+      data: userCategoryPlans,
     });
 
     const { password: _, ...user } = resCreate;
