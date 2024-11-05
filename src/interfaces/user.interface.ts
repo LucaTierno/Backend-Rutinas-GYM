@@ -1,4 +1,4 @@
-import { Role } from "../enums/role.enum";
+import { Role } from "@prisma/client";
 import { Auth } from "./auth.interface";
 import { CategoryPlan } from "./categoryPlan.interface";
 import { Routine } from "./routine.interface";
@@ -6,12 +6,10 @@ import { Routine } from "./routine.interface";
 export interface User extends Auth {
   name: string;
   age: number;
-  // email: Auth,
-  // password: Auth,
   phone: number;
   phoneEmergency: number;
   address: string;
-  categoryPlan?: CategoryPlan[];
+  categoryPlans: CategoryPlan[];
   role: Role;
   routines?: Routine[];
 }

@@ -6,7 +6,16 @@ import { generateToken } from "../utils/jwt.handle";
 
 const registerNewUser = async (data: User) => {
   try {
-    const { name, age, email, password, phone, phoneEmergency, address } = data;
+    const {
+      name,
+      age,
+      email,
+      password,
+      phone,
+      phoneEmergency,
+      address,
+      categoryPlans: plansIds,
+    } = data;
 
     const alreadyUser = await prisma.user.findFirst({ where: { email } });
 
@@ -15,6 +24,8 @@ const registerNewUser = async (data: User) => {
     }
 
     const passHash = await encrypt(password);
+
+    console.log(plansIds);
 
     const resCreate = await prisma.user.create({
       data: {
@@ -25,6 +36,20 @@ const registerNewUser = async (data: User) => {
         phone,
         phoneEmergency,
         address,
+        categoryPlans: {
+          create: plansIds.map((planId) => ({
+            categoryPlan: {
+              connect: { id: planId },
+            },
+          })),
+        },
+        include: {
+          categoryPlans: {
+            include: {
+              categoryPlan: true,
+            },
+          },
+        },
       },
     });
 
@@ -62,11 +87,11 @@ const loginUser = async (data: Auth) => {
       throw { status: 401, message: "Contraseña incorrecta" };
     }
 
-    const token = generateToken(findUser.id, findUser.email, findUser.name)
+    const token = generateToken(findUser.id, findUser.email, findUser.name);
 
     const { password: _, ...user } = findUser;
 
-    return {user, token};
+    return { user, token };
   } catch (error: any) {
     if (error.status) {
       throw error;
