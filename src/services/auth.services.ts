@@ -21,7 +21,7 @@ const registerNewUser = async (data: User, res: Response) => {
     const alreadyUser = await prisma.user.findFirst({ where: { email } });
 
     if (alreadyUser) {
-      return res.status(409).json({ message: "El email ya está en uso" });
+      throw { status: 409, message: "El email ya está en uso" };
     }
 
     const passHash = await encrypt(password);
