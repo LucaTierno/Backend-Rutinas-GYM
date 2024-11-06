@@ -28,10 +28,17 @@ const getUsers = async () => {
     const findUsers = await prisma.user.findMany({
       include: {
         routine: true,
-        categoryPlans: true,
+        categoryPlans: {
+          include: {
+            categoryPlan: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
-
     if (!findUsers || findUsers.length === 0) {
       throw { status: 404, message: "No se encontró ningún usuario" };
     }
@@ -40,7 +47,21 @@ const getUsers = async () => {
       ({ password, ...user }) => user
     );
 
-    return usersWithoutPasswords;
+    // formateo de la data para que llegue mejor ordernada
+    const formattedUsers = findUsers.map((user) => ({
+      id: user.id,
+      name: user.name,
+      age: user.age,
+      email: user.email,
+      phone: user.phone,
+      phoneEmergency: user.phoneEmergency,
+      address: user.address,
+      role: user.role,
+      routine: user.routine,
+      categoryPlans: user.categoryPlans.map((cp) => cp.categoryPlan.name),
+    }));
+
+    return formattedUsers;
   } catch (error: any) {
     if (error.status) {
       throw error;
@@ -48,48 +69,71 @@ const getUsers = async () => {
     throw { status: 500, message: "Error al obtener los usuarios" };
   }
 };
-
-type UpdateUserData = {
-  address?: string;
-  age?: number;
-  email?: string;
-  name?: string;
-  phone?: number;
-  phoneEmergency?: number;
-};
-
-const updateUserById = async (id: string, data: UpdateUserData) => {
+const updateUserById = async (id: string, data: any) => {
+  console.log("la data que llega es ", data);
   try {
-    const findUser = await prisma.user.findFirst({
-      where: {
-        id,
-      },
+    const findUser = await prisma.user.findUnique({
+      where: { id },
     });
 
     if (!findUser) {
       throw { status: 400, message: "No se encontró el usuario" };
     }
 
-    const updateUser = await prisma.user.update({
-      where: {
-        id,
-      },
-      data,
-    });
+    const { categoryPlans, ...userData } = data;
 
-    if (!updateUser) {
-      throw { status: 400, message: "No se pudo actualizar el usuario" };
+    // Si hay categoryPlans, actualizamos las relaciones
+    if (categoryPlans && Array.isArray(categoryPlans)) {
+      // Primero obtenemos los IDs de los planes por nombre
+      const plansIds = await prisma.categoryPlan.findMany({
+        where: {
+          name: { in: categoryPlans },
+        },
+        select: { id: true },
+      });
+
+      // Eliminamos todas las relaciones existentes
+      await prisma.userCategoryPlan.deleteMany({
+        where: { userId: id },
+      });
+
+      // Solo creamos nuevas relaciones si se encontraron planes
+      if (plansIds.length > 0) {
+        const newCategoryPlans = plansIds.map((plan) => ({
+          userId: id,
+          categoryPlanId: plan.id,
+        }));
+
+        await prisma.userCategoryPlan.createMany({
+          data: newCategoryPlans,
+        });
+      }
     }
+
+    // Actualizamos el resto de los datos del usuario
+    const updateUser = await prisma.user.update({
+      where: { id },
+      data: userData,
+      include: {
+        categoryPlans: {
+          include: {
+            categoryPlan: true,
+          },
+        },
+      },
+    });
 
     return updateUser;
   } catch (error: any) {
     if (error.status) {
       throw error;
     }
-    throw { status: 500, message: "Error al actualizar el usuario" };
+    throw {
+      status: 500,
+      message: error.message || "Error al actualizar el usuario",
+    };
   }
 };
-
 const deleteUserById = async (id: string) => {
   try {
     const findUser = await prisma.user.findFirst({
