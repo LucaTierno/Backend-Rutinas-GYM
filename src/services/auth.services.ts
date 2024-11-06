@@ -47,8 +47,6 @@ const registerNewUser = async (data: User, res: Response) => {
       },
     });
 
-    console.log(plansIds);
-
     const userCategoryPlans = plansIds.map((categoryPlan) => ({
       userId: resCreate.id,
       categoryPlanId: categoryPlan.id,
