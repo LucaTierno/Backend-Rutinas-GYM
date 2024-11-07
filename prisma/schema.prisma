@@ -35,8 +35,7 @@ model Routine {
   id            String        @id @default(uuid())
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
-
-  name          String
+  
   day           Day
 
   //? Relaciones
@@ -79,7 +78,7 @@ model User {
   role            Role         @default(CLIENT)
 
   //? Relaciones
-  routine  Routine[]
+  routines  Routine[]
   categoryPlans UserCategoryPlan[] 
 }
 

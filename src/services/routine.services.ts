@@ -5,11 +5,10 @@ import prisma from "../lib/prisma";
 //* Creamos la rutina
 const createRoutine = async (routine: Routine, userId: string) => {
   try {
-    const { name, day, routineExercises } = routine;
+    const { day, routineExercises } = routine;
 
     const newRoutine = await prisma.routine.create({
       data: {
-        name,
         day,
         userId,
         routineExercises: {

@@ -35,6 +35,17 @@ const registerNewUser = async (data: User, res: Response) => {
         phone,
         phoneEmergency,
         address,
+        routines: {
+          create: [
+            { day: 'lunes' },
+            { day: 'martes' },
+            { day: 'miercoles' },
+            { day: 'jueves' },
+            { day: 'viernes' },
+            { day: 'sabado' },
+            { day: 'domingo' }
+          ],
+        },
       },
     });
 

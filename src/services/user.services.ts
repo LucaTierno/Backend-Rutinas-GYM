@@ -6,6 +6,10 @@ const getUserById = async (id: string) => {
       where: {
         id,
       },
+      include: {
+        routines: true,
+        categoryPlans: true,
+      }
     });
 
     if (!getUser) {
@@ -27,7 +31,7 @@ const getUsers = async () => {
   try {
     const findUsers = await prisma.user.findMany({
       include: {
-        routine: true,
+        routines: true,
         categoryPlans: {
           include: {
             categoryPlan: {
@@ -57,7 +61,7 @@ const getUsers = async () => {
       phoneEmergency: user.phoneEmergency,
       address: user.address,
       role: user.role,
-      routine: user.routine,
+      routines: user.routines,
       categoryPlans: user.categoryPlans.map((cp) => cp.categoryPlan.name),
     }));
 
@@ -69,6 +73,7 @@ const getUsers = async () => {
     throw { status: 500, message: "Error al obtener los usuarios" };
   }
 };
+
 const updateUserById = async (id: string, data: any) => {
   console.log("la data que llega es ", data);
   try {
