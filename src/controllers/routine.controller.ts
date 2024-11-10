@@ -4,20 +4,20 @@ import { routineService } from "../services/routine.services";
 import { JwtPayload } from "jsonwebtoken";
 
 //* Crear rutina
-const handlePostRoutine = async (req: RequestExt, res: Response) => {
-  try {
-    const { body } = req;
-    const { id } = req.user as JwtPayload;
+// const handlePostRoutine = async (req: RequestExt, res: Response) => {
+//   try {
+//     const { body } = req;
+//     const { id } = req.user as JwtPayload;
 
-    const response = await routineService.createRoutine(body, id);
-    res.send(response);
-  } catch (error: any) {
-    const status = error.status || 500;
-    const message = error.message || "Error inesperado.";
+//     const response = await routineService.createRoutine(body, id);
+//     res.send(response);
+//   } catch (error: any) {
+//     const status = error.status || 500;
+//     const message = error.message || "Error inesperado.";
 
-    res.status(status).json({ error: message });
-  }
-};
+//     res.status(status).json({ error: message });
+//   }
+// };
 
 // //* Obtener la rutina por el ID
 const handleGetRoutine = async (req: RequestExt, res: Response) => {
@@ -78,6 +78,6 @@ export const routineController = {
   handleDeleteRoutine,
   handleGetRoutine,
   handleGetRoutines,
-  handlePostRoutine,
+  // handlePostRoutine,
   handleUpdateRoutine,
 };

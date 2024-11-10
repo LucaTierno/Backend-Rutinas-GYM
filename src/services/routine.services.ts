@@ -92,51 +92,53 @@ const getRoutineForClientById = async (userId: string, routineId: string) => {
   }
 };
 
-type UpdateRoutineData = {
-  day?: Day;
-  routineExercises?: UpdateRoutineExerciseData[];
-};
-
 type UpdateRoutineExerciseData = {
-  exerciseId?: string;
-  routineId?: string;
+  exerciseId: string;
+  routineId: string;
   sets?: number;
   reps?: number;
-  duration?: number;
+  time?: number;
   comment?: string;
 };
 
 //* Actualizar la rutina
-const updateRoutine = async (routineId: string, data: UpdateRoutineData) => {
+const updateRoutine = async (
+  routineId: string,
+  data: UpdateRoutineExerciseData
+) => {
   try {
-    const routineUpdate = await prisma.routine.update({
-      where: {
-        id: routineId,
-      },
-      data: {
-        ...data,
-        routineExercises: data.routineExercises
-          ? {
-              upsert: data.routineExercises.map((exercise) => ({
-                where: {
-                  id: exercise.routineId || "",
-                },
-                create: {
-                  exerciseId: exercise.exerciseId!,
-                  sets: exercise.sets,
-                  reps: exercise.reps,
-                  duration: exercise.duration,
-                  comment: exercise.comment,
-                },
-                update: exercise,
-              })),
-            }
-          : undefined,
-      },
-      include: {
-        routineExercises: true,
-      },
-    });
+    // const routineUpdate = await prisma.routine.update({
+    //   where: {
+    //     id: routineId,
+    //   },
+    //   data: {
+    //     ...data,
+    //     routineExercises: data.routineExercises
+    //       ? {
+    //           upsert: data.routineExercises.map((exercise) => ({
+    //             where: {
+    //               id: exercise.routineId || "",
+    //             },
+    //             create: {
+    //               exerciseId: exercise.exerciseId!,
+    //               sets: exercise.sets,
+    //               reps: exercise.reps,
+    //               duration: exercise.duration,
+    //               comment: exercise.comment,
+    //             },
+    //             update: exercise,
+    //           })),
+    //         }
+    //       : undefined,
+    //   },
+    //   include: {
+    //     routineExercises: true,
+    //   },
+    // });
+
+    console.log("data en el back: ", data);
+
+    const routineUpdate = await prisma.routineExercises.create({ data });
 
     if (!routineUpdate) {
       throw { status: 401, message: "No se pudo actualizar la rutina" };
