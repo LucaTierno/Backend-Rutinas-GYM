@@ -8,7 +8,15 @@ const getUserById = async (id: string) => {
         id,
       },
       include: {
-        routines: true,
+        routines: {
+          include: {
+            routineExercises: {
+              include: {
+                exercise: true
+              }
+            }
+          }
+        },
         categoryPlans: true,
       }
     });

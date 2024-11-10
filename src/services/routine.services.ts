@@ -49,7 +49,11 @@ const getRoutinesForClient = async (userId: string) => {
         userId,
       },
       include: {
-        routineExercises: true,
+        routineExercises: {
+          include: {
+            exercise: true,
+          },
+        },
       },
     });
 
@@ -75,7 +79,11 @@ const getRoutineForClientById = async (userId: string, routineId: string) => {
         userId,
       },
       include: {
-        routineExercises: true,
+        routineExercises: {
+          include: {
+            exercise: true,
+          },
+        },
       },
     });
 
