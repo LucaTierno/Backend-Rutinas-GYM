@@ -12,8 +12,6 @@ const CreateRoutineExerciseSchema = z.object({
 
 export const CreateRoutineSchema = z.object({
   body: z.object({
-    name: z.string().min(3).max(40),
-    day: DayEnum,
     // userId: z.string().uuid(),
     routineExercises: z.array(CreateRoutineExerciseSchema).min(1),
   }),
