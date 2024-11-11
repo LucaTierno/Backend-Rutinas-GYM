@@ -58,7 +58,6 @@ const getRoutineForClientById = async (userId: string, routineId: string) => {
     throw { status: 500, message: "Error al obtener la rutina." };
   }
 };
-
 type UpdateRoutineExerciseData = {
   exerciseId: string;
   routineId: string;
@@ -68,13 +67,37 @@ type UpdateRoutineExerciseData = {
   comment?: string;
 };
 
-//* Asignamos el ejercicio a la rutina
 const createRoutineExercise = async (data: UpdateRoutineExerciseData) => {
+  console.log("data q llega", data);
   try {
-    const res = await prisma.routineExercises.create({ data });
+    // Primero verificamos que el ejercicio existe
+    const existingExercise = await prisma.exercise.findUnique({
+      where: {
+        id: data.exerciseId,
+      },
+    });
+
+    if (!existingExercise) {
+      throw { status: 404, message: "El ejercicio no existe" };
+    }
+
+    // Creamos la relación entre el ejercicio y la rutina con los detalles específicos
+    const res = await prisma.routineExercises.create({
+      data: {
+        exerciseId: existingExercise.id,
+        routineId: data.routineId,
+        sets: data.sets,
+        reps: data.reps,
+        time: data.time,
+        comment: data.comment,
+      },
+    });
 
     if (!res) {
-      throw { status: 401, message: "No se pudo actualizar la rutina" };
+      throw {
+        status: 401,
+        message: "No se pudo asignar el ejercicio a la rutina",
+      };
     }
 
     return res;
@@ -82,10 +105,12 @@ const createRoutineExercise = async (data: UpdateRoutineExerciseData) => {
     if (error.status) {
       throw error;
     }
-    throw { status: 500, message: "Error al actualizar la rutina." };
+    throw {
+      status: 500,
+      message: "Error al asignar el ejercicio a la rutina.",
+    };
   }
 };
-
 export const routineService = {
   getRoutinesForClient,
   getRoutineForClientById,
