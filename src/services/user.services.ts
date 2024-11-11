@@ -1,3 +1,4 @@
+
 import prisma from "../lib/prisma";
 
 const getUserById = async (id: string) => {
@@ -7,7 +8,15 @@ const getUserById = async (id: string) => {
         id,
       },
       include: {
-        routines: true,
+        routines: {
+          include: {
+            routineExercises: {
+              include: {
+                exercise: true
+              }
+            }
+          }
+        },
         categoryPlans: true,
       }
     });
@@ -75,7 +84,7 @@ const getUsers = async () => {
 };
 
 const updateUserById = async (id: string, data: any) => {
-  console.log("la data que llega es ", data);
+  console.log("DATA RECIBIDA EN EL BACK", data);
   try {
     const findUser = await prisma.user.findUnique({
       where: { id },
@@ -85,7 +94,7 @@ const updateUserById = async (id: string, data: any) => {
       throw { status: 400, message: "No se encontró el usuario" };
     }
 
-    const { categoryPlans, ...userData } = data;
+    const { categoryPlans, routines, ...userData } = data;
 
     // Si hay categoryPlans, actualizamos las relaciones
     if (categoryPlans && Array.isArray(categoryPlans)) {
@@ -139,6 +148,7 @@ const updateUserById = async (id: string, data: any) => {
     };
   }
 };
+
 const deleteUserById = async (id: string) => {
   try {
     const findUser = await prisma.user.findFirst({

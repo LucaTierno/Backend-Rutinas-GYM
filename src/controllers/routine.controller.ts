@@ -3,28 +3,15 @@ import { RequestExt } from "../interfaces/requestExt.interface";
 import { routineService } from "../services/routine.services";
 import { JwtPayload } from "jsonwebtoken";
 
-//* Crear rutina
-const handlePostRoutine = async (req: RequestExt, res: Response) => {
-  try {
-    const { body } = req;
-    const { id } = req.user as JwtPayload;
-
-    const response = await routineService.createRoutine(body, id);
-    res.send(response);
-  } catch (error: any) {
-    const status = error.status || 500;
-    const message = error.message || "Error inesperado.";
-
-    res.status(status).json({ error: message });
-  }
-};
-
-// //* Obtener la rutina por el ID
+//* Obtener la rutina por el ID
 const handleGetRoutine = async (req: RequestExt, res: Response) => {
   try {
     const { id } = req.user as JwtPayload;
     const routineId = req.params.id;
-    const response = await routineService.getRoutineForClientById(id, routineId);
+    const response = await routineService.getRoutineForClientById(
+      id,
+      routineId
+    );
     res.send(response);
   } catch (error: any) {
     const status = error.status || 500;
@@ -48,12 +35,11 @@ const handleGetRoutines = async (req: RequestExt, res: Response) => {
 };
 
 //* Actualizar la rutina
-const handleUpdateRoutine = async (req: RequestExt, res: Response) => {
+const handleCreateRoutineExercises = async (req: RequestExt, res: Response) => {
   try {
-    const { id } = req.params;
     const { body } = req;
-    const updatedExercise = await routineService.updateRoutine(id, body);
-    res.send(updatedExercise);
+    const resCreate = await routineService.createRoutineExercise(body);
+    res.send(resCreate);
   } catch (error: any) {
     const status = error.status || 500;
     const message = error.message || "Error inesperado.";
@@ -78,6 +64,5 @@ export const routineController = {
   handleDeleteRoutine,
   handleGetRoutine,
   handleGetRoutines,
-  handlePostRoutine,
-  handleUpdateRoutine,
+  handleCreateRoutineExercises,
 };
