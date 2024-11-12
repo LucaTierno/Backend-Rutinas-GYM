@@ -19,7 +19,11 @@ const createExercise = async (data: Exercise) => {
 //* Obtener todos los ejercicios
 const getExercises = async () => {
   try {
-    const resExercises = await prisma.exercise.findMany();
+    const resExercises = await prisma.exercise.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      },
+    });
 
     if (!resExercises) {
       throw { status: 400, message: "No se pudo obtener ningún ejercicio" };

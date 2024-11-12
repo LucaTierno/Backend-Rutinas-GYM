@@ -39,6 +39,9 @@ const getUserById = async (id: string) => {
 const getUsers = async () => {
   try {
     const findUsers = await prisma.user.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      },
       include: {
         routines: true,
         categoryPlans: {
@@ -52,16 +55,15 @@ const getUsers = async () => {
         },
       },
     });
+    
     if (!findUsers || findUsers.length === 0) {
       throw { status: 404, message: "No se encontró ningún usuario" };
     }
 
-    const usersWithoutPasswords = findUsers.map(
-      ({ password, ...user }) => user
-    );
-
     // formateo de la data para que llegue mejor ordernada
     const formattedUsers = findUsers.map((user) => ({
+      createAt: user.createdAt,
+      updateAt: user.updatedAt,
       id: user.id,
       name: user.name,
       age: user.age,
