@@ -51,15 +51,15 @@ const handleCreateRoutineExercises = async (req: RequestExt, res: Response) => {
 
 //* Eliminar el ejercicio
 const handleDeleteRoutine = async (req: RequestExt, res: Response) => {
-  // try {
-  //   const { id } = req.params;
-  //   const deleteExercise = await exerciseService.deleteExercise(id);
-  //   res.send(deleteExercise);
-  // } catch (error: any) {
-  //   const status = error.status || 500;
-  //   const message = error.message || "Error inesperado.";
-  //   res.status(status).json({ error: message });
-  // }
+  try {
+    const { id } = req.params;
+    const deleteExercise = await routineService.deleteExerciseInRoutine(id);
+    res.send(deleteExercise);
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || "Error inesperado.";
+    res.status(status).json({ error: message });
+  }
 };
 
 export const routineController = {

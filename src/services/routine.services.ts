@@ -68,7 +68,6 @@ type UpdateRoutineExerciseData = {
 };
 
 const createRoutineExercise = async (data: UpdateRoutineExerciseData) => {
-  console.log("data q llega", data);
   try {
     // Primero verificamos que el ejercicio existe
     const existingExercise = await prisma.exercise.findUnique({
@@ -111,8 +110,33 @@ const createRoutineExercise = async (data: UpdateRoutineExerciseData) => {
     };
   }
 };
+
+const deleteExerciseInRoutine = async (id: string) => {
+  try {
+
+    const deleteExercise = await prisma.routineExercises.delete({
+      where: {
+        id
+      }
+    })
+
+    if (!deleteExercise) {
+      throw { status: 404, message: "No se encontro el ejercicio" };
+    }
+
+    return deleteExercise
+
+  } catch (error: any) {
+    if (error.status) {
+      throw error;
+    }
+    throw { status: 500, message: "Error al eliminar el ejercicio." };
+  }
+}
+
 export const routineService = {
   getRoutinesForClient,
   getRoutineForClientById,
   createRoutineExercise,
+  deleteExerciseInRoutine
 };

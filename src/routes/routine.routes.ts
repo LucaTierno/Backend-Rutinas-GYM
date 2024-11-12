@@ -18,6 +18,7 @@ router.post(
   routineController.handleCreateRoutineExercises
 );
 
-router.delete("/:id");
+//* Eliminamos el ejercicio que esta en la rutina
+router.delete("/:id", checkSession, routineController.handleDeleteRoutine);
 
 export { router };
