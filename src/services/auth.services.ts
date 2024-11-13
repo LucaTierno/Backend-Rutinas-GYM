@@ -101,7 +101,7 @@ const loginUser = async (data: Auth) => {
       throw { status: 401, message: "Contraseña incorrecta" };
     }
 
-    const token = generateToken(findUser.id, findUser.email, findUser.name);
+    const token = generateToken(findUser.id, findUser.email, findUser.name, findUser.role);
 
     const { password: _, ...user } = findUser;
 
