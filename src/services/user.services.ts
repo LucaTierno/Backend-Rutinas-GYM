@@ -17,7 +17,11 @@ const getUserById = async (id: string) => {
             }
           }
         },
-        categoryPlans: true,
+        categoryPlans: {
+          include: {
+            categoryPlan: true
+          }
+        },
       }
     });
 
