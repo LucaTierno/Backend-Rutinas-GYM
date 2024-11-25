@@ -6,7 +6,11 @@ import { router } from "./routes";
 const PORT = process.env.PORT || 3001;
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://frontend-rutinas-gym-production-46a6.up.railway.app/",
+  })
+);
 app.use(express.json());
 app.use(router);
 
