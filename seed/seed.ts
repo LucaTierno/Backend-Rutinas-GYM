@@ -16,9 +16,9 @@ async function main() {
       { name: "Fuerza" },
       { name: "Resistencia" },
       { name: "Funcional" },
-      { name: "Musculacion" },
-      { name: "Recuperacion" },
-      { name: "Deficit" },
+      { name: "Musculación" },
+      { name: "Recuperación" },
+      { name: "Déficit" },
     ],
   });
 

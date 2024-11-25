@@ -19,10 +19,17 @@ const createCategoryPlan = async (data: CategoryPlan) => {
 //* Obtener todos los planes de entrenamiento
 const getCategoryPlans = async () => {
   try {
-    const findCategoryPlans = await prisma.categoryPlan.findMany();
+    const findCategoryPlans = await prisma.categoryPlan.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
     if (!findCategoryPlans || findCategoryPlans.length === 0) {
-      throw { status: 404, message: "No se encontró ningún plan de entrenamiento" };
+      throw {
+        status: 404,
+        message: "No se encontró ningún plan de entrenamiento",
+      };
     }
 
     return findCategoryPlans;
@@ -30,7 +37,10 @@ const getCategoryPlans = async () => {
     if (error.status) {
       throw error;
     }
-    throw { status: 500, message: "Error al obtener los planes de entrenamiento" };
+    throw {
+      status: 500,
+      message: "Error al obtener los planes de entrenamiento",
+    };
   }
 };
 
