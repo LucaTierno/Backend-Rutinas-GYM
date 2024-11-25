@@ -8,7 +8,10 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(
   cors({
-    origin: "https://frontend-rutinas-gym-production-46a6.up.railway.app/",
+    origin: [
+      "https://frontend-rutinas-gym-production-46a6.up.railway.app/",
+      "https://frontend-rutinas-gym.vercel.app/",
+    ],
   })
 );
 app.use(express.json());
