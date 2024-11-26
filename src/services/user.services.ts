@@ -1,4 +1,3 @@
-
 import prisma from "../lib/prisma";
 
 const getUserById = async (id: string) => {
@@ -12,17 +11,17 @@ const getUserById = async (id: string) => {
           include: {
             routineExercises: {
               include: {
-                exercise: true
-              }
-            }
-          }
+                exercise: true,
+              },
+            },
+          },
         },
         categoryPlans: {
           include: {
-            categoryPlan: true
-          }
+            categoryPlan: true,
+          },
         },
-      }
+      },
     });
 
     if (!getUser) {
@@ -44,7 +43,7 @@ const getUsers = async () => {
   try {
     const findUsers = await prisma.user.findMany({
       orderBy: {
-        createdAt: 'desc'
+        createdAt: "desc",
       },
       include: {
         routines: true,
@@ -59,7 +58,7 @@ const getUsers = async () => {
         },
       },
     });
-    
+
     if (!findUsers || findUsers.length === 0) {
       throw { status: 404, message: "No se encontró ningún usuario" };
     }
@@ -90,7 +89,6 @@ const getUsers = async () => {
 };
 
 const updateUserById = async (id: string, data: any) => {
-  console.log("DATA RECIBIDA EN EL BACK", data);
   try {
     const findUser = await prisma.user.findUnique({
       where: { id },
@@ -100,7 +98,21 @@ const updateUserById = async (id: string, data: any) => {
       throw { status: 400, message: "No se encontró el usuario" };
     }
 
-    const { categoryPlans, routines, ...userData } = data;
+    const { categoryPlans, routines, email, ...userData } = data;
+
+    // Verificar si el email ha cambiado y si ya está en uso
+    if (email && email !== findUser.email) {
+      const existingEmail = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (existingEmail) {
+        throw {
+          status: 400,
+          message: "El email ya está en uso por otro usuario",
+        };
+      }
+    }
 
     // Si hay categoryPlans, actualizamos las relaciones
     if (categoryPlans && Array.isArray(categoryPlans)) {

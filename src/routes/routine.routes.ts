@@ -13,7 +13,6 @@ router.get("/:id", checkSession, routineController.handleGetRoutine);
 //* Asignamos los ejercicios a las rutinas ya creadas
 router.post(
   "/",
-  checkSession,
   schemaValition(CreateRoutineExerciseSchema),
   routineController.handleCreateRoutineExercises
 );

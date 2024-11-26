@@ -36,8 +36,6 @@ const handleGetRoutines = async (req: RequestExt, res: Response) => {
 
 //* Actualizar la rutina
 const handleCreateRoutineExercises = async (req: RequestExt, res: Response) => {
-  console.log(req, res);
-
   try {
     const { body } = req;
     const resCreate = await routineService.createRoutineExercise(body);

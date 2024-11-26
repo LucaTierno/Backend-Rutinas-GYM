@@ -10,8 +10,8 @@ export const CreateExerciseSchema = z.object({
       .min(3, {
         message: "El nombre del ejercicio debe tener al menos 3 caracteres",
       })
-      .max(20, {
-        message: "El nombre del ejercicio no puede tener más de 20 caracteres",
+      .max(40, {
+        message: "El nombre del ejercicio no puede tener más de 40 caracteres",
       }),
     image: z.string().optional(), 
     muscleGroups: z
@@ -27,8 +27,8 @@ export const UpdateExerciseSchema = z.object({
       .min(3, {
         message: "El nombre del ejercicio debe tener al menos 3 caracteres",
       })
-      .max(20, {
-        message: "El nombre del ejercicio no puede tener más de 20 caracteres",
+      .max(40, {
+        message: "El nombre del ejercicio no puede tener más de 40 caracteres",
       })
       .optional(),
     image: z.string().optional(), 
