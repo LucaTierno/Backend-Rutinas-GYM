@@ -5,15 +5,17 @@ import { router } from "./routes";
 
 const PORT = process.env.PORT || 3001;
 
+const originsConfig = [process.env.FRONTEND_URL || ""];
+
 const app = express();
 app.use(
   cors({
-    origin: [
-      "https://frontend-rutinas-gym-production-46a6.up.railway.app/",
-      "https://frontend-rutinas-gym.vercel.app/",
-    ],
+    origin: originsConfig,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   })
 );
+app.options("*", cors());
 app.use(express.json());
 app.use(router);
 
