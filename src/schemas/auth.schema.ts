@@ -6,8 +6,8 @@ export const RegisterUserSchema = z.object({
     age: z.number().nonnegative().max(100),
     email: z.string().email(),
     password: z.string(),
-    phone: z.number().nonnegative(),
-    phoneEmergency: z.number().nonnegative(),
+    phone: z.number().nonnegative().max(17),
+    phoneEmergency: z.number().nonnegative().max(17),
     address: z.string().min(5),
   }),
 });
