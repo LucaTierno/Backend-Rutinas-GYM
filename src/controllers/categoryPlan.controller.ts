@@ -24,7 +24,23 @@ const handlerGetCategoryPlans = async (req: RequestExt, res: Response) => {
   }
 };
 
+const handlerDeleteCategoryPlans = async (
+  { params }: RequestExt,
+  res: Response
+) => {
+  try {
+    const { id } = params;
+    const response = await categoryPlanService.deleteCategoryPlan(id);
+    res.send(response);
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || "Error inesperado.";
+    res.status(status).json({ error: message });
+  }
+};
+
 export const categoryPlanController = {
   handlerPostCategoryPlan,
   handlerGetCategoryPlans,
+  handlerDeleteCategoryPlans,
 };

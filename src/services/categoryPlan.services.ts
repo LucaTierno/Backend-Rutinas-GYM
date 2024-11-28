@@ -44,7 +44,31 @@ const getCategoryPlans = async () => {
   }
 };
 
+const deleteCategoryPlan = async (id: string) => {
+  try {
+    const deleteCategory = await prisma.categoryPlan.delete({ where: { id } });
+
+    if (!deleteCategory) {
+      throw {
+        status: 404,
+        message: "No se pudo eliminar la categoria",
+      };
+    }
+
+    return deleteCategory;
+  } catch (error: any) {
+    if (error.status) {
+      throw error;
+    }
+    throw {
+      status: 500,
+      message: "Error al eliminar la categoria",
+    };
+  }
+};
+
 export const categoryPlanService = {
   createCategoryPlan,
   getCategoryPlans,
+  deleteCategoryPlan,
 };

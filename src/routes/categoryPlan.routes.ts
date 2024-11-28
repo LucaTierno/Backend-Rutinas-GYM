@@ -13,4 +13,6 @@ router.post(
 
 router.get("/", categoryPlanController.handlerGetCategoryPlans);
 
+router.delete("/:id", categoryPlanController.handlerDeleteCategoryPlans);
+
 export { router };

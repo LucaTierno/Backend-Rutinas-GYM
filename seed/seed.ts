@@ -52,24 +52,9 @@ async function main() {
     },
   });
 
-  // Crear usuario Cliente
-  const clientPassword = await hash("client123", 10);
-  const client = await prisma.user.create({
-    data: {
-      name: "Client User",
-      age: 25,
-      email: "client@gym.com",
-      password: clientPassword,
-      phone: 3456789012,
-      phoneEmergency: 7654321098,
-      address: "Calle Client 789",
-      role: "CLIENT",
-    },
-  });
-
   console.log("Seeding completed!");
   console.log("Created CategoryPlans:", categoryPlans);
-  console.log("Created Users:", { admin, coach, client });
+  console.log("Created Users:", { admin, coach });
 }
 
 main()
