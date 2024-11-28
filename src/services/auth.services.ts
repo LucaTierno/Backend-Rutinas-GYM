@@ -37,13 +37,13 @@ const registerNewUser = async (data: User, res: Response) => {
         address,
         routines: {
           create: [
-            { day: 'lunes' },
-            { day: 'martes' },
-            { day: 'miercoles' },
-            { day: 'jueves' },
-            { day: 'viernes' },
-            { day: 'sabado' },
-            { day: 'domingo' }
+            { day: "lunes" },
+            { day: "martes" },
+            { day: "miercoles" },
+            { day: "jueves" },
+            { day: "viernes" },
+            { day: "sabado" },
+            { day: "domingo" },
           ],
         },
       },
@@ -82,10 +82,11 @@ const registerNewUser = async (data: User, res: Response) => {
 const loginUser = async (data: Auth) => {
   try {
     const { password, email } = data;
+    const formatedEmail = email.toLowerCase();
 
     const findUser = await prisma.user.findFirst({
       where: {
-        email,
+        email: formatedEmail,
       },
     });
 
@@ -101,7 +102,12 @@ const loginUser = async (data: Auth) => {
       throw { status: 401, message: "Contraseña incorrecta" };
     }
 
-    const token = generateToken(findUser.id, findUser.email, findUser.name, findUser.role);
+    const token = generateToken(
+      findUser.id,
+      findUser.email,
+      findUser.name,
+      findUser.role
+    );
 
     const { password: _, ...user } = findUser;
 
