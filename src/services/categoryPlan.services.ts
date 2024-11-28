@@ -44,6 +44,34 @@ const getCategoryPlans = async () => {
   }
 };
 
+const updateCategoryPlan = async (data: CategoryPlan) => {
+  try {
+    const { name, id } = data;
+
+    const updateCategory = await prisma.categoryPlan.update({
+      where: { id },
+      data: { name },
+    });
+
+    if (!updateCategory) {
+      throw {
+        status: 404,
+        message: "No se encontró el plan de entrenamiento",
+      };
+    }
+
+    return updateCategory;
+  } catch (error: any) {
+    if (error.status) {
+      throw error;
+    }
+    throw {
+      status: 500,
+      message: "Error al editar el plan de entrenamiento",
+    };
+  }
+};
+
 const deleteCategoryPlan = async (id: string) => {
   try {
     const deleteCategory = await prisma.categoryPlan.delete({ where: { id } });
@@ -71,4 +99,5 @@ export const categoryPlanService = {
   createCategoryPlan,
   getCategoryPlans,
   deleteCategoryPlan,
+  updateCategoryPlan,
 };
