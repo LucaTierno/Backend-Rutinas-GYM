@@ -98,12 +98,14 @@ const updateUserById = async (id: string, data: any) => {
       throw { status: 400, message: "No se encontró el usuario" };
     }
 
-    const { categoryPlans, routines, email, ...userData } = data;
+    const { categoryPlans, routines, ...userData } = data;
 
     // Verificar si el email ha cambiado y si ya está en uso
-    if (email && email !== findUser.email) {
+    if (userData.email && userData.email !== findUser.email) {
       const existingEmail = await prisma.user.findUnique({
-        where: { email },
+        where: { 
+          email: userData.email
+         },
       });
 
       if (existingEmail) {
