@@ -12,13 +12,15 @@ async function main() {
   // Crear CategoryPlans
   const categoryPlans = await prisma.categoryPlan.createMany({
     data: [
-      { name: "Aeróbico" },
       { name: "Fuerza" },
       { name: "Resistencia" },
       { name: "Funcional" },
       { name: "Musculación" },
-      { name: "Recuperación" },
-      { name: "Déficit" },
+      { name: "CrossFit" },
+      { name: "Cardio" },
+      { name: "Pilates" },
+      { name: "Yoga" },
+      { name: "Boxeo" },
     ],
   });
 
@@ -53,8 +55,6 @@ async function main() {
   });
 
   console.log("Seeding completed!");
-  console.log("Created CategoryPlans:", categoryPlans);
-  console.log("Created Users:", { admin, coach });
 }
 
 main()
