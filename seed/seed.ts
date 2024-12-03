@@ -8,9 +8,10 @@ async function main() {
   await prisma.userCategoryPlan.deleteMany({});
   await prisma.user.deleteMany({});
   await prisma.categoryPlan.deleteMany({});
+  await prisma.exercise.deleteMany({});
 
   // Crear CategoryPlans
-  const categoryPlans = await prisma.categoryPlan.createMany({
+  await prisma.categoryPlan.createMany({
     data: [
       { name: "Fuerza" },
       { name: "Resistencia" },
@@ -24,9 +25,12 @@ async function main() {
     ],
   });
 
+  // Obtener todos los categoryPlans creados
+  const plans = await prisma.categoryPlan.findMany();
+
   // Crear usuario Admin
   const adminPassword = await hash("admin123", 10);
-  const admin = await prisma.user.create({
+  await prisma.user.create({
     data: {
       name: "Admin User",
       age: 30,
@@ -41,7 +45,7 @@ async function main() {
 
   // Crear usuario Coach
   const coachPassword = await hash("coach123", 10);
-  const coach = await prisma.user.create({
+  await prisma.user.create({
     data: {
       name: "Coach User",
       age: 28,
@@ -53,6 +57,40 @@ async function main() {
       role: "COACH",
     },
   });
+
+  // Crear usuarios CLIENT y asignarles un CategoryPlan
+  for (let i = 1; i <= 20; i++) {
+    const userPassword = await hash(`password${i}`, 10);
+
+    await prisma.user.create({
+      data: {
+        name: `Usuario ${i}`,
+        age: 20 + i, // Edades entre 21 y 40
+        email: `usuario${i}@gym.com`,
+        password: userPassword,
+        phone: 1000000000 + i, // Números de teléfono únicos
+        phoneEmergency: 2000000000 + i, // Números de emergencia únicos
+        address: `Calle Fitness ${i}`,
+        role: "CLIENT",
+        routines: {
+          create: [
+            { day: "lunes" },
+            { day: "martes" },
+            { day: "miercoles" },
+            { day: "jueves" },
+            { day: "viernes" },
+            { day: "sabado" },
+            { day: "domingo" },
+          ],
+        },
+        categoryPlans: {
+          create: {
+            categoryPlanId: plans[i % plans.length].id, // Asignar un CategoryPlan rotativo
+          },
+        },
+      },
+    });
+  }
 
   console.log("Seeding completed!");
 }
