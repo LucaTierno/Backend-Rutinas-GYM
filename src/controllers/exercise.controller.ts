@@ -18,7 +18,7 @@ const handleGetExercise = async (req: RequestExt, res: Response) => {
 //* Obtener todos los ejercicios
 const handleGetExercises = async (req: RequestExt, res: Response) => {
   try {
-    const response = await exerciseService.getExercises();
+    const response = await exerciseService.getExercises(req);
     res.send(response);
   } catch (error: any) {
     const status = error.status || 500;

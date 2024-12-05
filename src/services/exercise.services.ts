@@ -1,4 +1,5 @@
 import { Exercise } from "../interfaces/exercise.interface";
+import { RequestExt } from "../interfaces/requestExt.interface";
 import prisma from "../lib/prisma";
 
 //* Crear ejercicio
@@ -17,19 +18,36 @@ const createExercise = async (data: Exercise) => {
 };
 
 //* Obtener todos los ejercicios
-const getExercises = async () => {
+const getExercises = async (req: RequestExt) => {
   try {
-    const resExercises = await prisma.exercise.findMany({
-      orderBy: {
-        createdAt: 'desc'
-      },
-    });
+    const { page = 1, limit = 12 } = req.query;
 
-    if (!resExercises) {
+    const pageInt = parseInt(page as string);
+    const limitInt = parseInt(limit as string);
+    const offset = (pageInt - 1) * limitInt;
+
+    const [exercises, total] = await Promise.all([
+      prisma.exercise.findMany({
+        skip: offset,
+        take: limitInt,
+        orderBy: {
+          createdAt: "desc",
+        },
+      }),
+      prisma.user.count(), // Total de usuarios para calcular las páginas
+    ]);
+
+    if (!exercises) {
       throw { status: 400, message: "No se pudo obtener ningún ejercicio" };
     }
 
-    return resExercises;
+    return {
+      exercises,
+      total,
+      page: pageInt,
+      limit: limitInt,
+      totalPages: Math.ceil(total / limitInt),
+    };
   } catch (error: any) {
     if (error.status) {
       throw error;
