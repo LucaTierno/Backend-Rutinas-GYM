@@ -1,3 +1,4 @@
+import { RequestExt } from "../interfaces/requestExt.interface";
 import prisma from "../lib/prisma";
 
 const getUserById = async (id: string) => {
@@ -39,32 +40,42 @@ const getUserById = async (id: string) => {
   }
 };
 
-const getUsers = async () => {
+const getUsers = async (req: RequestExt) => {
   try {
-    const findUsers = await prisma.user.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        routines: true,
-        categoryPlans: {
-          include: {
-            categoryPlan: {
-              select: {
-                name: true,
+    const { page = 1, limit = 10 } = req.query;
+
+    const pageInt = parseInt(page as string);
+    const limitInt = parseInt(limit as string);
+    const offset = (pageInt - 1) * limitInt;
+
+    const [users, total] = await Promise.all([
+      prisma.user.findMany({
+        skip: offset,
+        take: limitInt,
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          routines: true,
+          categoryPlans: {
+            include: {
+              categoryPlan: {
+                select: {
+                  name: true,
+                },
               },
             },
           },
         },
-      },
-    });
+      }),
+      prisma.user.count(), // Total de usuarios para calcular las páginas
+    ]);
 
-    if (!findUsers || findUsers.length === 0) {
+    if (!users || users.length === 0) {
       throw { status: 404, message: "No se encontró ningún usuario" };
     }
 
-    // formateo de la data para que llegue mejor ordernada
-    const formattedUsers = findUsers.map((user) => ({
+    const formattedUsers = users.map((user) => ({
       createAt: user.createdAt,
       updateAt: user.updatedAt,
       id: user.id,
@@ -79,7 +90,13 @@ const getUsers = async () => {
       categoryPlans: user.categoryPlans.map((cp) => cp.categoryPlan.name),
     }));
 
-    return formattedUsers;
+    return {
+      formattedUsers,
+      total,
+      page: pageInt,
+      limit: limitInt,
+      totalPages: Math.ceil(total / limitInt),
+    };
   } catch (error: any) {
     if (error.status) {
       throw error;
@@ -103,9 +120,9 @@ const updateUserById = async (id: string, data: any) => {
     // Verificar si el email ha cambiado y si ya está en uso
     if (userData.email && userData.email !== findUser.email) {
       const existingEmail = await prisma.user.findUnique({
-        where: { 
-          email: userData.email
-         },
+        where: {
+          email: userData.email,
+        },
       });
 
       if (existingEmail) {

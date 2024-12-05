@@ -1,5 +1,4 @@
-import { Request, Response } from "express";
-
+import { Response } from "express";
 import { userService } from "../services/user.services";
 import { RequestExt } from "../interfaces/requestExt.interface";
 
@@ -17,7 +16,7 @@ const handleGetUser = async ({ params }: RequestExt, res: Response) => {
 
 const handleGetUsers = async (req: RequestExt, res: Response) => {
   try {
-    const response = await userService.getUsers();
+    const response = await userService.getUsers(req);
     res.send(response);
   } catch (error: any) {
     const status = error.status || 500;
@@ -26,8 +25,7 @@ const handleGetUsers = async (req: RequestExt, res: Response) => {
   }
 };
 
-const handleUpdateUser = async (req: 
-  RequestExt, res: Response) => {
+const handleUpdateUser = async (req: RequestExt, res: Response) => {
   try {
     const { id } = req.params;
     const { body } = req;
@@ -40,8 +38,7 @@ const handleUpdateUser = async (req:
   }
 };
 
-const handleDeleteUser = async (req: 
-  RequestExt, res: Response) => {
+const handleDeleteUser = async (req: RequestExt, res: Response) => {
   try {
     const { id } = req.params;
     const response = await userService.deleteUserById(id);
