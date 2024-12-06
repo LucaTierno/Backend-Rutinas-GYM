@@ -20,6 +20,22 @@ const createExercise = async (data: Exercise) => {
 //* Obtener todos los ejercicios
 const getExercises = async (req: RequestExt) => {
   try {
+    const noPagination = req.query;
+
+    if (Object.keys(noPagination).length === 0) {
+      const exercises = await prisma.exercise.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      if (!exercises) {
+        throw { status: 400, message: "No se pudo obtener ningún ejercicio" };
+      }
+
+      return { exercises };
+    }
+
     const { page = 1, limit = 12 } = req.query;
 
     const pageInt = parseInt(page as string);
