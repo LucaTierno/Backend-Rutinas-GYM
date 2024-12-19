@@ -58,19 +58,44 @@ async function main() {
     },
   });
 
-  // Crear usuarios CLIENT y asignarles un CategoryPlan
-  for (let i = 1; i <= 20; i++) {
-    const userPassword = await hash(`password${i}`, 10);
+  const fullNames = [
+    "Lucas Gómez",
+    "Martina Rodríguez",
+    "Joaquín Fernández",
+    "Valentina López",
+    "Mateo Martínez",
+    "Sofía Pérez",
+    "Lautaro Díaz",
+    "Camila Romero",
+    "Santiago Herrera",
+    "Lucía Morales",
+    "Agustín Torres",
+    "Florencia Gutiérrez",
+    "Tomás Ramírez",
+    "Julieta Sánchez",
+    "Benjamín Castillo",
+    "Milagros Silva",
+    "Franco Vargas",
+    "Catalina Jiménez",
+    "Nicolás Castro",
+    "Emilia Navarro",
+  ];
+
+  for (let i = 0; i < fullNames.length; i++) {
+    const userPassword = await hash(`password${i + 1}`, 10);
+    const [firstName, lastName] = fullNames[i].split(" "); // Separar el nombre y apellido
 
     await prisma.user.create({
       data: {
-        name: `Usuario ${i}`,
-        age: 20 + i, // Edades entre 21 y 40
-        email: `usuario${i}@gym.com`,
+        name: fullNames[i], // Nombre completo
+        age: 21 + i, // Edades entre 21 y 40
+        email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@gym.com`, // Email basado en el nombre y apellido
         password: userPassword,
-        phone: 1000000000 + i, // Números de teléfono únicos
-        phoneEmergency: 2000000000 + i, // Números de emergencia únicos
-        address: `Calle Fitness ${i}`,
+        phone: Number(`223${Math.floor(1000000 + Math.random() * 8999999)}`), // Teléfono único con prefijo 223
+        phoneEmergency: Number(
+          `223${Math.floor(1000000 + Math.random() * 8999999)}`
+        ), // Teléfono de emergencia único
+        address: `Calle Fitness ${i + 1}`,
         role: "CLIENT",
         routines: {
           create: [
